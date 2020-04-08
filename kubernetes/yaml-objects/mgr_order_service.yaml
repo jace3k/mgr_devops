@@ -34,8 +34,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 5432
+  - port: 3000
     protocol: TCP
-    name: mgr-order
+    name: mgr-order-service
   selector:
     app: mgr-order

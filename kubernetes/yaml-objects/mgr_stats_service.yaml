@@ -34,8 +34,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 5432
+  - port: 3000
     protocol: TCP
-    name: mgr-stats
+    name: mgr-stats-service
   selector:
     app: mgr-stats
