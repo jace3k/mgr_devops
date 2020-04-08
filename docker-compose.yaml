@@ -1,0 +1,46 @@
+version: '3.7'
+services: 
+  mgr_order_db:
+    image: postgres:11
+    ports:
+      - 6000:5432
+  mgr_product_db:
+    image: postgres:11
+    ports:
+      - 6001:5432
+  mgr_order_service:
+    image: mgr_order_service:1.0.4
+    ports:
+      - 7000:3000
+    links:
+      - mgr_order_db
+    environment:
+      - DB_HOST=mgr_order_db
+      - DB_PORT=5432
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
+  mgr_product_service:
+    image: mgr_product_service:1.0.5
+    ports: 
+      - 7001:3000
+    links:
+      - mgr_product_db
+    environment:
+      - DB_HOST=mgr_product_db
+      - DB_PORT=5432
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
+  mgr_stats_service:
+    image: mgr_stats_service:1.0.5
+    ports:
+      - 8000:3000
+    links:
+      - mgr_order_service
+      - mgr_product_service
+    environment: 
+      - ORDER_HOST=mgr_order_service
+      - ORDER_PORT=3000
+      - PRODUCT_HOST=mgr_product_service
+      - PRODUCT_PORT=3000

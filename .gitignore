@@ -1,0 +1,7 @@
+credentials.sh
+j-app.pem
+j-app.pub
+
+**/terraform.tfstate
+**/terraform.tfstate.backup
+.terraform

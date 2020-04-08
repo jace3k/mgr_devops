@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mgr-order-deployment
+  labels:
+    app: mgr-order
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mgr-order
+  template:
+    metadata:
+      labels:
+        app: mgr-order
+    spec:
+      containers:
+      - name: mgr-order
+        image: asdawas/mgr_order_service:latest
+        ports:
+        - containerPort: 3000
+        envFrom:
+          - secretRef:
+              name: mgr-order-secret
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mgr-order-service
+  labels:
+    app: mgr-order-service
+spec:
+  type: NodePort
+  ports:
+  - port: 5432
+    protocol: TCP
+    name: mgr-order
+  selector:
+    app: mgr-order
