@@ -10,6 +10,7 @@ apt install -y \
   ca-certificates \
   curl \
   software-properties-common \
+  gnupg2 \
   socat \
   jq \
   httpie \
@@ -25,5 +26,33 @@ apt install -y \
   apparmor-utils \
   python-docker \
   python-pip >> /root/output.txt
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - >> /root/output.txt
+add-apt-repository \
+  "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) \
+  stable" >> /root/output.txt
+
+apt-get update && apt-get install -y \
+  containerd.io=1.2.13-1 \
+  docker-ce=5:19.03.8~3-0~ubuntu-$(lsb_release -cs) \
+  docker-ce-cli=5:19.03.8~3-0~ubuntu-$(lsb_release -cs) >> /root/output.txt
+
+cat > /etc/docker/daemon.json <<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "1000m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+
+mkdir -p /etc/systemd/system/docker.service.d
+
+# Restart docker.
+systemctl daemon-reload
+systemctl restart docker
 
 echo "Script done.  The time is now $(date -R)!" >> /root/output.txt

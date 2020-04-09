@@ -62,6 +62,13 @@ resource "openstack_compute_secgroup_v2" "j-app-sec-group" {
     ip_protocol = "udp"
     self        = "true"
   }
+  # app
+  rule {
+    from_port   = 30001
+    to_port     = 30001
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
+  }
 }
 
 resource "openstack_compute_instance_v2" "j-app-instance" {
