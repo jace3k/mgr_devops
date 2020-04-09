@@ -34,7 +34,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 3000
+  - port: 30001
+    targetPort: 3000
+    nodePort: 30001
     protocol: TCP
     name: mgr-stats-service
   selector:
