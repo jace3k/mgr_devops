@@ -52,12 +52,17 @@ resource "openstack_compute_secgroup_v2" "k-app-sec-group" {
     ip_protocol = "udp"
     self        = "true"
   }
-
   rule {
     from_port   = 30000
     to_port     = 65535
     ip_protocol = "tcp"
     self        = "true"
+  }
+  rule {
+    from_port   = 30001
+    to_port     = 30001
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
   }
 }
 
@@ -79,12 +84,12 @@ resource "openstack_compute_instance_v2" "k-app-instance" {
 
 resource "openstack_compute_floatingip_v2" "fip-pool-2" {
   count = 4
-  pool = "datacentre"
+  pool  = "datacentre"
 }
 
 resource "openstack_compute_floatingip_associate_v2" "fip-associate-2" {
-  count = 4
+  count       = 4
   floating_ip = element(openstack_compute_floatingip_v2.fip-pool-2.*.address, count.index)
   instance_id = element(openstack_compute_instance_v2.k-app-instance.*.id, count.index)
-  fixed_ip = element(openstack_compute_instance_v2.k-app-instance.*.network.0.fixed_ip_v4, count.index)
+  fixed_ip    = element(openstack_compute_instance_v2.k-app-instance.*.network.0.fixed_ip_v4, count.index)
 }

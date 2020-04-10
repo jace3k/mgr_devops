@@ -9,7 +9,7 @@ services:
     ports:
       - 6001:5432
   mgr_order_service:
-    image: mgr_order_service:1.0.4
+    image: asdawas/mgr_order_service:latest
     ports:
       - 7000:3000
     links:
@@ -21,7 +21,7 @@ services:
       - DB_USER=postgres
       - DB_PASS=postgres
   mgr_product_service:
-    image: mgr_product_service:1.0.5
+    image: asdawas/mgr_product_service:latest
     ports: 
       - 7001:3000
     links:
@@ -33,7 +33,7 @@ services:
       - DB_USER=postgres
       - DB_PASS=postgres
   mgr_stats_service:
-    image: mgr_stats_service:1.0.5
+    image: asdawas/mgr_stats_service:latest
     ports:
       - 8000:3000
     links:
