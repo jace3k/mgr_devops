@@ -93,3 +93,30 @@ resource "openstack_compute_floatingip_associate_v2" "fip-associate-2" {
   instance_id = element(openstack_compute_instance_v2.k-app-instance.*.id, count.index)
   fixed_ip    = element(openstack_compute_instance_v2.k-app-instance.*.network.0.fixed_ip_v4, count.index)
 }
+
+
+# Test unit 
+
+resource "openstack_compute_instance_v2" "k-app-client-instance" {
+  name            = "kapp-client"
+  image_name      = "nesc-baseimages-ubuntu-18.04-2020-01-10"
+  flavor_name     = "aa.002-0008"
+  key_pair        = openstack_compute_keypair_v2.k-app-key.name
+  security_groups = [openstack_compute_secgroup_v2.k-app-sec-group.name, "default"]
+  network {
+    uuid = "abf6e91e-cfa8-4838-9a82-d399adf4af08"
+  }
+  metadata = {
+    nesc-autostart = "yes"
+  }
+}
+
+resource "openstack_compute_floatingip_v2" "fip-pool-2-cli" {
+  pool = "datacentre"
+}
+
+resource "openstack_compute_floatingip_associate_v2" "fip-associate-2-cli" {
+  floating_ip = openstack_compute_floatingip_v2.fip-pool-2-cli.address
+  instance_id = openstack_compute_instance_v2.k-app-client-instance.id
+  fixed_ip    = openstack_compute_instance_v2.k-app-client-instance.network.0.fixed_ip_v4
+}

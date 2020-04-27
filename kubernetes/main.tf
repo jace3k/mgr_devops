@@ -89,12 +89,39 @@ resource "openstack_compute_instance_v2" "j-app-instance" {
 
 resource "openstack_compute_floatingip_v2" "fip-pool" {
   count = 4
-  pool = "datacentre"
+  pool  = "datacentre"
 }
 
 resource "openstack_compute_floatingip_associate_v2" "fip-associate" {
-  count = 4
+  count       = 4
   floating_ip = element(openstack_compute_floatingip_v2.fip-pool.*.address, count.index)
   instance_id = element(openstack_compute_instance_v2.j-app-instance.*.id, count.index)
-  fixed_ip = element(openstack_compute_instance_v2.j-app-instance.*.network.0.fixed_ip_v4, count.index)
+  fixed_ip    = element(openstack_compute_instance_v2.j-app-instance.*.network.0.fixed_ip_v4, count.index)
+}
+
+
+## Test unit
+
+resource "openstack_compute_instance_v2" "j-app-client-instance" {
+  name            = "japp-client"
+  image_name      = "nesc-baseimages-ubuntu-18.04-2020-01-10"
+  flavor_name     = "aa.002-0008"
+  key_pair        = openstack_compute_keypair_v2.j-app-key.name
+  security_groups = [openstack_compute_secgroup_v2.j-app-sec-group.name, "default"]
+  network {
+    uuid = "373db6d2-63a6-4344-bca8-688fb2c45f76"
+  }
+  metadata = {
+    nesc-autostart = "yes"
+  }
+}
+
+resource "openstack_compute_floatingip_v2" "fip-pool-cli" {
+  pool = "datacentre"
+}
+
+resource "openstack_compute_floatingip_associate_v2" "fip-associate-cli" {
+  floating_ip = openstack_compute_floatingip_v2.fip-pool-cli.address
+  instance_id = openstack_compute_instance_v2.j-app-client-instance.id
+  fixed_ip    = openstack_compute_instance_v2.j-app-client-instance.network.0.fixed_ip_v4
 }
