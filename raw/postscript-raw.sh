@@ -23,7 +23,8 @@ echo "deb http://apt.postgresql.org/pub/repos/apt/ ${RELEASE}"-pgdg main | sudo 
 sudo apt update >> /root/output.txt
 sudo apt -y install postgresql-11 >> /root/output.txt
 sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/11/main/postgresql.conf
+sed -i '1ihost  all  all 0.0.0.0/0 md5' /etc/postgresql/11/main/pg_hba.conf
 sudo systemctl restart postgresql >> /root/output.txt
-sudo -u postgres psql -c "alter user postgres with password 'postgres';" >> /root/output.txt
+sudo -u postgres psql -c "alter user postgres with encrypted password 'postgres';" >> /root/output.txt
 
 echo "Postscript done." >> /root/output.txt

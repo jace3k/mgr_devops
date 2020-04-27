@@ -1,8 +1,8 @@
 #! /bin/bash
 
 cd ~
-git clone https://github.com/jace3k/mgr_order_service.git
-cd mgr_order_service
+git clone https://github.com/jace3k/mgr_product_service.git
+cd mgr_product_service
 bundle install
 # run when .env file will be filled properly.
 # rails db:migrate
