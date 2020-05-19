@@ -15,7 +15,7 @@ services:
   mgr_order_service:
     image: asdawas/mgr_order_service:latest
     ports:
-      - 7000:3000
+      - 30011:3000
     links:
       - mgr_order_db
     environment:
@@ -27,7 +27,7 @@ services:
   mgr_product_service:
     image: asdawas/mgr_product_service:latest
     ports: 
-      - 7001:3000
+      - 30010:3000
     links:
       - mgr_product_db
     environment:
@@ -39,7 +39,7 @@ services:
   mgr_stats_service:
     image: asdawas/mgr_stats_service:latest
     ports:
-      - 8000:3000
+      - 30001:3000
     links:
       - mgr_order_service
       - mgr_product_service
