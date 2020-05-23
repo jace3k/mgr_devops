@@ -17,3 +17,4 @@ kubectl apply -f kube-flannel.yaml
 echo "Adding dashboard"
 wget -c https://github.com/derailed/k9s/releases/download/v0.19.1/k9s_Linux_x86_64.tar.gz -O - | tar -xz
 
+kubeadm token create --print-join-command > join.txt
