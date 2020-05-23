@@ -16,15 +16,4 @@
       kubectl apply -f kube-flannel.yaml
   - name: Adding dashboard
     shell: wget -c https://github.com/derailed/k9s/releases/download/v0.19.1/k9s_Linux_x86_64.tar.gz -O - | tar -xz
-  - name: Generate join command
-    shell: "kubeadm token create --print-join-command"
-    register: join_command
-  - name: Add join command do join_host
-    add_host:
-      name: join_host
-      join_command: "{{ join_command.stdout_lines[0] }}"
 
-- hosts: workers
-  tasks:    
-  - name: Join to the cluster
-    shell: "{{ hostvars['join_host']['join_command'] }}"
