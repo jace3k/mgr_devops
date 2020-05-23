@@ -1,0 +1,17 @@
+[master]
+192.168.10.20
+
+[workers]
+192.168.10.16
+192.168.10.23
+192.168.10.5
+
+[master:vars]
+ansible_ssh_private_key_file=./j-app.pem
+
+[workers:vars]
+ansible_ssh_private_key_file=./j-app.pem
+
+[kcluster:children]
+master
+workers

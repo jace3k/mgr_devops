@@ -1,0 +1,30 @@
+- hosts: master
+  tasks:
+  - name: Kubernetes init
+    shell: |
+      kubeadm init --pod-network-cidr=10.244.0.0/16 \
+      --apiserver-advertise-address "{{ ansible_eth0.ipv4.address }}"  \      
+      --apiserver-cert-extra-sans kubernetes.cluster.home
+  - name: Kubernetes configuration
+    shell: |
+      mkdir -p $HOME/.kube && \
+      cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && \
+      chown $(id -u):$(id -g) $HOME/.kube/config
+  - name: Adding flannel
+    shell: |
+      curl https://rawgit.com/coreos/flannel/master/Documentation/kube-flannel.yml > kube-flannel.yaml && \
+      kubectl apply -f kube-flannel.yaml
+  - name: Adding dashboard
+    shell: wget -c https://github.com/derailed/k9s/releases/download/v0.19.1/k9s_Linux_x86_64.tar.gz -O - | tar -xz
+  - name: Generate join command
+    shell: "kubeadm token create --print-join-command"
+    register: join_command
+  - name: Add join command do join_host
+    add_host:
+      name: join_host
+      join_command: "{{ join_command.stdout_lines[0] }}"
+
+- hosts: workers
+  tasks:    
+  - name: Join to the cluster
+    shell: "{{ hostvars['join_host']['join_command'] }}"
