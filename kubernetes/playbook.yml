@@ -1,8 +1,5 @@
 - hosts: master
   tasks:
-  - name: Write instance host key to known hosts
-    connection: local
-    shell: "ssh-keyscan -H {{ inventory_hostname }} >> ~/.ssh/known_hosts"
   - name: Kubernetes init
     shell: |
       kubeadm init --pod-network-cidr=10.244.0.0/16 \
