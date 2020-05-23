@@ -69,6 +69,20 @@ resource "openstack_compute_secgroup_v2" "j-app-sec-group" {
     ip_protocol = "tcp"
     cidr        = "0.0.0.0/0"
   }
+  # app 2
+  rule {
+    from_port   = 30002
+    to_port     = 30002
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
+  }
+  # db
+  rule {
+    from_port   = 30003
+    to_port     = 30003
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
+  }
 }
 
 resource "openstack_compute_instance_v2" "j-app-instance" {

@@ -1,4 +1,4 @@
-IP=$(ifconfig | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | head -n 1)
+IP=$(ifconfig | grep 'inet ' | cut -d ':' -f 2 | awk '{ print $2 }' | grep -E '^(192\.168|10\.)' | head -n 1)
 echo $IP
 
 kubeadm init --pod-network-cidr=10.244.0.0/16 \
