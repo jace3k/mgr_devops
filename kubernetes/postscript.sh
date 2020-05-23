@@ -5,7 +5,7 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - >>
 echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" >> /etc/apt/sources.list.d/kubernetes.list
 apt-get update >> /root/output.txt
 apt-get install -y kubelet kubeadm kubectl kubernetes-cni >> /root/output.txt
-apt install -y \
+apt-get install -y \
   apt-transport-https \
   ca-certificates \
   curl \
@@ -54,5 +54,7 @@ mkdir -p /etc/systemd/system/docker.service.d
 # Restart docker.
 systemctl daemon-reload
 systemctl restart docker
+
+git clone https://github.com/jace3k/mgr_devops.git >> /root/output.txt
 
 echo "Script done.  The time is now $(date -R)!" >> /root/output.txt
