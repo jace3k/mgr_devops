@@ -64,6 +64,18 @@ resource "openstack_compute_secgroup_v2" "k-app-sec-group" {
     ip_protocol = "tcp"
     cidr        = "0.0.0.0/0"
   }
+  rule {
+    from_port   = 30002
+    to_port     = 30002
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
+  }
+  rule {
+    from_port   = 30003
+    to_port     = 30003
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
+  }
 }
 
 resource "openstack_compute_instance_v2" "k-app-instance" {

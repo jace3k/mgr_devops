@@ -1,0 +1,16 @@
+- hosts: master
+  remote_user: root
+  tasks:
+  - name: Generate join command
+    shell: docker swarm join-token worker
+    register: join_command
+  - name: Add join command do join_host
+    add_host:
+      name: join_host
+      join_command: "{{ join_command.stdout_lines[2] }}"
+
+- hosts: workers
+  remote_user: root
+  tasks:    
+  - name: Join to the cluster
+    shell: "{{ hostvars['join_host']['join_command'] }}"

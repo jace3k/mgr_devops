@@ -2,7 +2,7 @@
 
 echo "Start script.  The time is now $(date -R)!" >> /root/output.txt
 apt-get update >> /root/output.txt
-apt install -y \
+apt-get install -y \
   apt-transport-https \
   ca-certificates \
   curl \
@@ -22,5 +22,7 @@ apt install -y \
   apparmor-utils \
   python-docker \
   python-pip >> /root/output.txt
+
+git clone https://github.com/jace3k/mgr_devops.git >> /root/output.txt
 
 echo "Script done.  The time is now $(date -R)!" >> /root/output.txt

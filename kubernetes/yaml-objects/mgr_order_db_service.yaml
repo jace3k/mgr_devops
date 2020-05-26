@@ -34,7 +34,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 5432
+  - port: 30003
+    targetPort: 5432
+    nodePort: 30003
     protocol: TCP
     name: mgr-order-db-service
   selector:
