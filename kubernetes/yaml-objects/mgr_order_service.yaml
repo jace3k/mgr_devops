@@ -35,7 +35,10 @@ spec:
   type: NodePort
   ports:
   - port: 3000
+    targetPort: 3000
+    nodePort: 30002
     protocol: TCP
     name: mgr-order-service
   selector:
     app: mgr-order
+

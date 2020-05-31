@@ -34,7 +34,7 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 30003
+  - port: 5432
     targetPort: 5432
     nodePort: 30003
     protocol: TCP
