@@ -1,15 +1,17 @@
 sudo apt-get install httperf -y
 
 # run as follows:
-# 
-# HOST=192.168.10.25 ./httperf_order.sh
+# E=k_ - kubernetes
+# E=s_ - swarm
+#
+# E=k_ HOST=192.168.10.25 ./httperf_order.sh
 
 STARTED_AT=$(date +%Y_%m_%d_%H_%M_%S)
 echo "Started at: ${STARTED_AT}"
 
 perform () {
   echo "${1}..."
-  httperf --server ${HOST} --port 30002 --uri /orders --num-conns ${1} --rate ${1} | tee -a order_svc_results_${STARTED_AT}.txt
+  httperf --server ${HOST} --port 30002 --uri /orders --num-conns ${1} --rate ${1} | tee -a ${E}order_svc_results_${STARTED_AT}.txt
 }
 
 perform 10

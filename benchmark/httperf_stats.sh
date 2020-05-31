@@ -9,7 +9,7 @@ echo "Started at: ${STARTED_AT}"
 
 perform () {
   echo "${1}..."
-  httperf --server ${HOST} --port 30001 --uri /order_stats --num-conns ${1} --rate ${1} | tee -a stats_svc_results_${STARTED_AT}.txt
+  httperf --server ${HOST} --port 30001 --uri /order_stats --num-conns ${1} --rate ${1} | tee -a ${E}stats_svc_results_${STARTED_AT}.txt
 }
 
 perform 10
