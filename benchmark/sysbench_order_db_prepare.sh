@@ -7,8 +7,9 @@ curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.de
 sudo apt -y install sysbench
 sysbench --version
 
-
-PGPASSWORD=postgres psql -U postgres -h ${HOST} -p ${PORT} -c "CREATE USER sbtest WITH PASSWORD 'password'; CREATE DATABASE sbtest; GRANT ALL PRIVILEGES ON DATABASE sbtest TO sbtest;"
+PGPASSWORD=postgres psql -U postgres -h ${HOST} -p ${PORT} -c "CREATE USER sbtest WITH PASSWORD 'sbtest';"
+PGPASSWORD=postgres psql -U postgres -h ${HOST} -p ${PORT} -c "CREATE DATABASE sbtest;"
+PGPASSWORD=postgres psql -U postgres -h ${HOST} -p ${PORT} -c "GRANT ALL PRIVILEGES ON DATABASE sbtest TO sbtest;"
 
 sysbench \
 --db-driver=pgsql \

@@ -22,11 +22,11 @@ perform 120
 perform 150
 perform 180
 perform 200
-perform 210
-perform 220
-perform 250
-perform 280
 perform 300
-
+perform 400
+perform 500
+perform 600
+perform 800
+perform 1000
 echo "done"
 
