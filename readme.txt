@@ -265,7 +265,7 @@ ansible-playbook playbook-join-workers.yml -i hosts
 ### Deployment 
 
 git clone https://github.com/jace3k/mgr_devops.git
-kubectl apply -f mgr_devops/kubernetes/yaml_objects/
+kubectl apply -f mgr_devops/kubernetes/yaml-objects/
 
 ### Seed
 
