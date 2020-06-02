@@ -221,8 +221,45 @@ ansible -i hosts workers -m shell -a "kubeadm join 192.168.10.20:6443 --token d6
 
 
 
+################################################
+################################################
+################################################
+################################################
+ TUTAJ START!
+################################################
+################################################
+################################################
+################################################
 
 
+Przygotowanie wirtualek:
+0. Ustawić w network settings na bridge.
+1. Na każdej trzeba zmienić statyczny IP:
+(https://linuxhint.com/setup_static_ip_address_ubuntu/   << Niżej jest dla Ubuntu server 20.04 LTS)
+
+ifconfig <- sprawdzić jak nazywa się interfejs
+
+sudo nano /etc/netplan/00-installer-config.yaml
+tutaj edytować addresses odpowiednio (jak się da).
+
+Kubernetes:
+192.168.0.101
+192.168.0.102
+192.168.0.103
+192.168.0.104
+
+
+Swarm:
+192.168.0.111
+192.168.0.112
+192.168.0.113
+192.168.0.114
+
+
+Native:
+192.168.0.121 (product svc & db)
+192.168.0.122 (order svc & db)
+192.168.0.123 (stats svc)
 
 
 
@@ -230,7 +267,7 @@ ansible -i hosts workers -m shell -a "kubeadm join 192.168.10.20:6443 --token d6
 #########################################################
 #########################################################
 #########################################################
-Zaczynamy tutaj 
+Tutaj juz instrukcje stawiania środowisk
 #########################################################
 #########################################################
 #########################################################
