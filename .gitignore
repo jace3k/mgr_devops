@@ -5,3 +5,4 @@ j-app.pub
 **/terraform.tfstate
 **/terraform.tfstate.backup
 .terraform
+.idea

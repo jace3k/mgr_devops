@@ -1,6 +1,8 @@
 import re
 from subprocess import check_output
 import csv
+import matplotlib.pyplot as plt
+import pandas as pd
 
 files_list = check_output(['ls', 'results']).decode('utf-8').split('\n')
 envs = ['kubernetes', 'swarm', 'native']
@@ -23,11 +25,6 @@ params = [
 
 class ResultParser:
     def __init__(self, files):
-        self.results_dict = {
-            'kubernetes': {},
-            'swarm': {},
-            'native': {},
-        }
         self.stats_service_files = filter(lambda x: 'stats_svc' in x, files)
         self.order_service_files = filter(lambda x: 'order_svc' in x, files)
         self.order_db_files = filter(lambda x: 'order_db' in x, files)
@@ -98,14 +95,17 @@ class ResultParser:
         return res.group(1)
 
     def start_stats_service(self):
-        self.parse_httperf_for(self.stats_service_files)
-        return self.results_dict
+        return self.parse_httperf_for(self.stats_service_files)
 
     def start_order_service(self):
-        self.parse_httperf_for(self.order_service_files)
-        return self.results_dict
+        return self.parse_httperf_for(self.order_service_files)
 
     def parse_httperf_for(self, service):
+        results_dict = {
+            'kubernetes': {},
+            'swarm': {},
+            'native': {}
+        }
         for result_file in service:
             with open(f'results/{result_file}', 'r') as result:
                 env_type = self.get_env_type(result_file)
@@ -130,49 +130,47 @@ class ResultParser:
                 conn_time_lines = list(filter(lambda x: 'Connection time [ms]: min' in x, lines))
                 for val in ['min', 'avg', 'max', 'median', 'stddev']:
                     values = list(map(self.map_connection_time(val), conn_time_lines))
-                    self.results_dict[env_type][f'conn_time_{val}_ms'] = values
+                    results_dict[env_type][f'conn_time_{val}_ms'] = values
 
-                self.results_dict[env_type]['connections'] = connections_values
-                self.results_dict[env_type]['requests'] = requests_values
-                self.results_dict[env_type]['replies'] = replies_values
-                self.results_dict[env_type]['reply_time_ms'] = reply_time_values
-                self.results_dict[env_type]['test_duration_s'] = test_duration_values
-                self.results_dict[env_type]['reply_status_200_count'] = reply_status_200_count
-                self.results_dict[env_type]['reply_status_500_count'] = reply_status_500_count
-                self.results_dict[env_type]['errors_total'] = errors_total_values
+                results_dict[env_type]['connections'] = connections_values
+                results_dict[env_type]['requests'] = requests_values
+                results_dict[env_type]['replies'] = replies_values
+                results_dict[env_type]['reply_time_ms'] = reply_time_values
+                results_dict[env_type]['test_duration_s'] = test_duration_values
+                results_dict[env_type]['reply_status_200_count'] = reply_status_200_count
+                results_dict[env_type]['reply_status_500_count'] = reply_status_500_count
+                results_dict[env_type]['errors_total'] = errors_total_values
+        return results_dict
 
 
-class CSVParser:
-    def __init__(self, results_dict):
-        self.results_dict = results_dict
+def genreate_csv_for(env, results_dict, label):
+    size = len(results_dict[env][params[0]])
+    data_list = [params]
 
-    def genreate_csv_for(self, env, svc):
-        size = len(self.results_dict[env][params[0]])
-        data_list = [params]
+    for i in range(size):
+        row = []
+        for value in params:
+            row.append(results_dict[env][value][i])
+        data_list.append(row)
 
-        for i in range(size):
-            row = []
-            for value in params:
-                row.append(rp.results_dict[env][value][i])
-            data_list.append(row)
-
-        with open(f'{env}_{svc}.csv', 'w') as file:
-            writer = csv.writer(file)
-            writer.writerows(data_list)
+    with open(f'{env}_{label}.csv', 'w') as file:
+        writer = csv.writer(file)
+        writer.writerows(data_list)
 
 
 rp = ResultParser(files_list)
 
-# Stats service
-results = rp.start_stats_service()
-csvp = CSVParser(results)
-for environ in envs:
-    csvp.genreate_csv_for(environ, 'stats_service')
+stats_results = rp.start_stats_service()
+order_results = rp.start_order_service()
 
-# Order service
-results = rp.start_order_service()
-csvp = CSVParser(results)
+# Stats service CSV
 for environ in envs:
-    csvp.genreate_csv_for(environ, 'order_service')
+    genreate_csv_for(environ, stats_results, 'stats_service')
 
-# print(rp.results_dict['kubernetes']['reply_time_ms'])
+# Order service CSV
+for environ in envs:
+    genreate_csv_for(environ, order_results, 'order_service')
+
+print(''.ljust(10), stats_results['kubernetes']['connections'])
+for e in envs:
+    print(e.ljust(10), order_results[e]['reply_time_ms'])
