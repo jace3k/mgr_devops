@@ -1,7 +1,7 @@
 #!/bin/bash -v
 
-echo "Start script.  The time is now $(date -R)!" >> /root/output.txt
-apt-get update >> /root/output.txt
+echo "Start script.  The time is now $(date -R)!" | tee -a /root/output.txt
+apt-get update | tee -a /root/output.txt
 apt-get install -y \
   apt-transport-https \
   ca-certificates \
@@ -21,8 +21,6 @@ apt-get install -y \
   apparmor-profiles-extra \
   apparmor-utils \
   python-docker \
-  python-pip >> /root/output.txt
+  python-pip | tee -a /root/output.txt
 
-git clone https://github.com/jace3k/mgr_devops.git >> /root/output.txt
-
-echo "Script done.  The time is now $(date -R)!" >> /root/output.txt
+echo "Script done.  The time is now $(date -R)!" | tee -a /root/output.txt
