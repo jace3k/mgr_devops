@@ -1,8 +1,8 @@
 #!/bin/bash -v
 
 echo "Start script.  The time is now $(date -R)!" | tee -a /root/output.txt
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - | tee -a /root/output.txt
-echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" >> /etc/apt/sources.list.d/kubernetes.list
 apt-get update | tee -a /root/output.txt
 apt-get install -y kubelet kubeadm kubectl kubernetes-cni | tee -a /root/output.txt
 apt-get install -y \
@@ -27,11 +27,11 @@ apt-get install -y \
   python-docker \
   python-pip | tee -a /root/output.txt
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - | tee -a /root/output.txt
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 add-apt-repository \
   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) \
-  stable" | tee -a /root/output.txt
+  stable"
 
 apt-get update && apt-get install -y \
   containerd.io=1.2.13-1 \
