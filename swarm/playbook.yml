@@ -1,5 +1,5 @@
 - hosts: master
   remote_user: root
   tasks:
-  - name: Kubernetes init
+  - name: Swarm init
     shell: docker swarm init --advertise-addr "{{ ansible_enp0s3.ipv4.address }}"
