@@ -44,7 +44,7 @@ sysbench \
 --pgsql-password=sbtest \
 --pgsql-db=sbtest \
 /usr/share/sysbench/tests/include/oltp_legacy/select.lua \
-run | results/tee -a ${E}order_db_result_${STARTED_AT}.txt
+run | tee -a results/${E}order_db_result_${STARTED_AT}.txt
 }
 
 
