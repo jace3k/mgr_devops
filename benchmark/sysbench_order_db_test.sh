@@ -4,9 +4,9 @@ echo "Started at: ${STARTED_AT}"
 
 
 rw_test () {
-echo "-------------------\n-----------------" | tee -a ${E}order_db_result_${STARTED_AT}.txt
-echo "READ/WRITE TESTING (table size: ${1})" | tee -a ${E}order_db_result_${STARTED_AT}.txt
-echo "-------------------\n-----------------" | tee -a ${E}order_db_result_${STARTED_AT}.txt
+echo "-------------------\n-----------------" | tee -a results/${E}order_db_result_${STARTED_AT}.txt
+echo "READ/WRITE TESTING (table size: ${1})" | tee -a results/${E}order_db_result_${STARTED_AT}.txt
+echo "-------------------\n-----------------" | tee -a results/${E}order_db_result_${STARTED_AT}.txt
 
 
 sysbench \
@@ -27,9 +27,9 @@ run | tee -a results/${E}order_db_result_${STARTED_AT}.txt
 
 
 ro_test () {
-echo "-------------------\n-----------------" | tee -a ${E}order_db_result_${STARTED_AT}.txt
-echo "READ ONLY TESTING (table size: ${1})" | tee -a ${E}order_db_result_${STARTED_AT}.txt
-echo "-------------------\n-----------------" | tee -a ${E}order_db_result_${STARTED_AT}.txt
+echo "-------------------\n-----------------" | tee -a results/${E}order_db_result_${STARTED_AT}.txt
+echo "READ ONLY TESTING (table size: ${1})" | tee -a results/${E}order_db_result_${STARTED_AT}.txt
+echo "-------------------\n-----------------" | tee -a results/${E}order_db_result_${STARTED_AT}.txt
 
 sysbench \
 --db-driver=pgsql \
