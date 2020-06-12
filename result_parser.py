@@ -41,7 +41,7 @@ params_db = [
 platforms = [
     'cloud',
     'home',
-    # 'pwr',
+    'pwr',
 ]
 
 envs = [
